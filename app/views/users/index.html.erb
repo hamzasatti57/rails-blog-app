@@ -1,0 +1,26 @@
+<div>
+ <ul class="nav justify-content-center bg-light text-white">
+  <li class="nav-item">
+   <%= link_to "All Blogs", posts_path, class: 'nav-link btn btn-primary' %>
+  </li>
+  <li class="nav-item">
+   <%= link_to "Profile", current_user, class: 'nav-link btn btn-primary' %>
+  </li>
+  <li class="nav-item">
+   <%= link_to "Update Profile", edit_user_registration_path, class: 'nav-link btn btn-primary' %>
+  </li>
+  <li class="nav-item">
+    <%= link_to(destroy_user_session_path, {:class => "nav-link btn btn-primary", :method => :delete}) do  %>
+      <span class="sidebar-normal"> Logout </span>
+    <% end %> 
+  </li>
+  </ul>
+  <div class="container">
+    <h2>User List:</h2>
+  </div>
+  <% @users.each do |user| %>
+    <%= link_to user_path(user.id) do %>
+      <%= render partial: "user_profile", locals: {user: user} %>
+    <% end %>
+  <% end %>
+</div>

@@ -1,0 +1,24 @@
+<nav class="fs-6 p-3 container mt-2 p-2 bio" style="height: 0px;">
+  <%= link_to "Home", root_path, class: "btn btn-primary d-flex justify-content-center align-self-center mb-5 button display" %>
+</nav>
+
+<div>
+  <div>
+    <div class="border border-3 border-dark container p-2 my-5 bio">
+      <div class="d-flex justify-content-between my-3">
+        <h4><%= @post.title %> by <%= link_to user_path(@post.user.id) do %> <%= @post.user.name %> <% end %></h4>
+        <p>Comments : <%= @post.comments.size%>  Likes : <%= @post.likes.size %> </p>
+      </div>
+        <p><%= @post.text %> </p>
+    </div>
+
+    <% if @post.comments.present? %>
+      <ul class="border border-2 border-dark container p-2 my-5 bio">
+        <% @post.comments.each do |c| %>
+          <li><%= c.user.name %>: <%= c.text%></li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <%= render partial: "comments/create" %>
+</div>

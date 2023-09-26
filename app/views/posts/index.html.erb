@@ -1,0 +1,72 @@
+<% if @user.present? %>
+  <div>
+   <div class="row" style="margin: 10px 0 0 160px;">
+      <%= link_to "Add a Blog", new_user_post_path(@user.id), class: "btn btn-primary d-flex justify-content-center align-self-center mb-5 button display" %>
+      <%= link_to "Home", root_path, class: "btn btn-primary d-flex justify-content-center align-self-center mb-5 button display" %>
+      <%= link_to "Back", :back, class: "btn btn-primary d-flex justify-content-center align-self-center mb-5 button display" %>
+   </div>
+    <%= render partial: "users/user_profile", locals: { user: @user } %>
+      <ul>
+        <% @user.posts.each do |p| %>
+          <li>
+            <div class="border border-3 border-dark container mt-5 p-2 bio">
+              <%= link_to user_post_path(@user.id, p.id), id: "user_post#{p.id}" do %>
+              <h4><%= p.title%></h4>
+              <% end %>
+              <p><%= p.text%></p>
+              <div>
+                <span>Comments: <%= p.comments.size %></span>
+              </div>
+            </div>
+            <% if p.recent_comments.present? %>
+              <div>
+                <ul class="border border-1 border-dark container p-2 mt-1 bio">
+                  <% p.recent_comments.each do |c| %>
+                  <li><%= c.user.name %>: <%= c.text%></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+  </div>
+<% else %>
+<div>
+     <div class="row" style="margin: 10px 0 -60px 160px;">
+      <%= link_to "Add a Blog", new_user_post_path(current_user.id), class: "btn btn-primary d-flex justify-content-center align-self-center mb-5 button display" %>
+      <%= link_to "Home", root_path, class: "btn btn-primary d-flex justify-content-center align-self-center mb-5 button display" %>
+      <%= link_to "Back", :back, class: "btn btn-primary d-flex justify-content-center align-self-center mb-5 button display" %>
+   </div>
+  <ul>
+    <% Post.all.each do |p| %>
+      <li>
+        <div class="border border-3 border-dark container mt-5 p-2 bio">
+          <%= link_to user_post_path(p.user_id, p.id), id: "user_post#{p.id}" do %>
+          <h4><%= p.title%></h4>
+          <% end %>
+          <p><%= p.text%></p>
+          <div>
+            <span>Comments: <%= p.comments.size %></span>
+            <% if current_user.likes.where(post_id: p.id).present? %>
+              <span><%= link_to "unfollow", "/posts/#{p.id}/unfollow", method: :post %></span>
+            <% else %>
+              <span><%= link_to "follow", "/posts/#{p.id}/follow", method: :post %></span>
+            <% end %>
+          </div>
+        </div>
+        <% if p.recent_comments.present? %>
+          <div>
+            <ul class="border border-1 border-dark container p-2 mt-1 bio">
+              <% p.recent_comments.each do |c| %>
+              <li><%= c.user.name %>: <%= c.text%></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+
+</div>
+<% end %>
